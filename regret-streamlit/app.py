@@ -218,6 +218,12 @@ def metric_card(label, value, accent=False):
     </div>""", unsafe_allow_html=True)
 
 
+def hex_to_rgba(hex_color, alpha=0.1):
+    """Convert hex color to rgba string for Plotly compatibility."""
+    hex_color = hex_color.lstrip("#")
+    r, g, b = int(hex_color[0:2], 16), int(hex_color[2:4], 16), int(hex_color[4:6], 16)
+    return f"rgba({r},{g},{b},{alpha})"
+
 def make_chart(datasets, years, title, dashed=False):
     fig = go.Figure()
     xs = [f"Yr {i+1}" for i in range(years)]
@@ -228,7 +234,7 @@ def make_chart(datasets, years, title, dashed=False):
         fig.add_trace(go.Scatter(
             x=xs, y=ds["data"], name=ds["label"],
             mode="lines", fill="tozeroy" if not dashed else None,
-            fillcolor=ds["color"] + "18" if not dashed else None,
+            fillcolor=hex_to_rgba(ds["color"], 0.1) if not dashed else None,
             line=line,
             hovertemplate="%{fullData.name}: <b>$%{y:,.0f}</b><extra></extra>",
         ))
